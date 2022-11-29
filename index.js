@@ -109,6 +109,25 @@ async function run(){
         const result = await allPhoneCollection.deleteOne(query);
         res.send(result);
       });
+
+      //products bookings
+      app.get('/bookings', verifyJWT, async (req, res) => {
+        const email = req.query.email;
+        const query = { email: email };
+        const decodedEmail = req.decoded.email;
+        if (email !== decodedEmail) {
+          return res.status(403).send({ message: 'forbidden access' });
+        }
+        const bookings = await bookingsCollection.find(query).toArray();
+        res.send(bookings);
+      });
+
+      app.get('/booking/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: ObjectId(id) };
+        const booking = await bookingsCollection.findOne(query);
+        res.send(booking);
+      });
     }
     finally{}
 }
