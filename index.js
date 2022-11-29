@@ -50,6 +50,19 @@ async function run(){
         }
         next();
       }
+
+      //phone categories
+      app.get('/categories', async (req, res) => {
+        const query = {};
+        const result = await categoriesCollection.find(query).toArray();
+        res.send(result);
+      });
+
+      app.get('/productCategory', async (req, res) => {
+        const query = {}
+        const result = await categoriesCollection.find(query).project({ name: 1 }).toArray();
+        res.send(result);
+      });
     }
     finally{}
 }
