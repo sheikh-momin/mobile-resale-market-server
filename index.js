@@ -32,6 +32,19 @@ function verifyJWT(req, res, next) {
 }
 
 
+async function run(){
+    try{
+      const categoriesCollection = client.db('mobileResaleMarket').collection('brandsCategories');
+      const allPhoneCollection = client.db('mobileResaleMarket').collection('allPhones');
+      const bookingsCollection = client.db('mobileResaleMarket').collection('bookings');
+      const usersCollection = client.db('mobileResaleMarket').collection('users');
+      const paymentsCollection = client.db('mobileResaleMarket').collection('payments');
+      const reportedItemsCollection = client.db('mobileResaleMarket').collection('reportedItems');
+    }
+    finally{}
+}
+run().catch(console.log);
+
 
 
 
