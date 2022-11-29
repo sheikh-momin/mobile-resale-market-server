@@ -169,6 +169,13 @@ async function run(){
         const seller = await usersCollection.find(query).toArray();
         res.send(seller);
       });
+
+      app.get('/users/admin/:email', async (req, res) => {
+        const email = req.params.email;
+        const query = { email };
+        const user = await usersCollection.findOne(query);
+        res.send({ isAdmin: user?.role === 'admin' });
+      });
     }
     finally{}
 }
