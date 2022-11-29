@@ -40,6 +40,16 @@ async function run(){
       const usersCollection = client.db('mobileResaleMarket').collection('users');
       const paymentsCollection = client.db('mobileResaleMarket').collection('payments');
       const reportedItemsCollection = client.db('mobileResaleMarket').collection('reportedItems');
+
+      const verifyAdmin = async (req, res, next) => {
+        const decodedEmail = req.decoded.email;
+        const query = { email: decodedEmail };
+        const user = await usersCollection.findOne(query);
+        if (user?.role !== 'admin') {
+          return res.status(403).send({ message: 'forbidden access' })
+        }
+        next();
+      }
     }
     finally{}
 }
