@@ -83,6 +83,25 @@ async function run(){
         const product = await allPhoneCollection.find(query).toArray();
         res.send(product);
       });
+
+      app.get('/products/advertised', async (req, res) => {
+        const query = { advertise: true };
+        const result = await allPhoneCollection.find(query).toArray();
+        res.send(result);
+      });
+
+      app.put('/products/advertise/:id', verifyJWT, async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updatedDoc = {
+          $set: {
+            advertise: true
+          }
+        }
+        const result = await allPhoneCollection.updateOne(filter, updatedDoc, options);
+        res.send(result);
+      });
     }
     finally{}
 }
