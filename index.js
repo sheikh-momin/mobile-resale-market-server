@@ -190,6 +190,13 @@ async function run(){
         const user = await usersCollection.findOne(query);
         res.send({ isBuyer: user?.accountType === 'User' });
       });
+
+      app.get('/users/verified/:email', async (req, res) => {
+        const email = req.params.email;
+        const query = { email };
+        const user = await usersCollection.findOne(query);
+        res.send({ isVerified: user?.status === 'verified' });
+      });
     }
     finally{}
 }
