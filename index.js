@@ -286,10 +286,10 @@ run().catch(console.log);
 
 
 app.get('/', (req, res) => {
-  res.send('phone resale house server running')
+  res.send('Mobile resale market server running')
 });
 
 app.listen(port, () => {
-  console.log(`phone resale house ${port}`);
+  console.log(`Mobile resale market ${port}`);
 });
 
