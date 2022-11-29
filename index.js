@@ -128,6 +128,22 @@ async function run(){
         const booking = await bookingsCollection.findOne(query);
         res.send(booking);
       });
+
+      app.post('/bookings', async (req, res) => {
+        const booking = req.body;
+        const query = {
+          productID: booking.productID,
+          email: booking.email,
+          productName: booking.productName
+        }
+        const alreadyBooked = await bookingsCollection.find(query).toArray();
+        if (alreadyBooked.length) {
+          const message = 'You have already booked this product';
+          return res.send({ acknowledged: false, message });
+        }
+        const result = await bookingsCollection.insertOne(booking);
+        res.send(result);
+      });
     }
     finally{}
 }
