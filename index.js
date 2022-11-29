@@ -144,6 +144,31 @@ async function run(){
         const result = await bookingsCollection.insertOne(booking);
         res.send(result);
       });
+
+
+      // users
+      app.get('/jwt', async (req, res) => {
+        const email = req.query.email;
+        const query = { email: email };
+        const user = await usersCollection.findOne(query);
+        if (user) {
+          const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, { expiresIn: '20d' });
+          return res.send({ accessToken: token });
+        }
+        res.status(403).send({ accessToken: '' });
+      });
+
+      app.get('/users/buyers', verifyJWT, verifyAdmin, async (req, res) => {
+        const query = { accountType: 'User' };
+        const buyer = await usersCollection.find(query).toArray();
+        res.send(buyer);
+      });
+
+      app.get('/users/sellers', verifyJWT, verifyAdmin, async (req, res) => {
+        const query = { accountType: 'Seller' };
+        const seller = await usersCollection.find(query).toArray();
+        res.send(seller);
+      });
     }
     finally{}
 }
