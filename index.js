@@ -197,6 +197,25 @@ async function run(){
         const user = await usersCollection.findOne(query);
         res.send({ isVerified: user?.status === 'verified' });
       });
+
+      app.post('/users', async (req, res) => {
+        const user = req.body;
+        const result = await usersCollection.insertOne(user);
+        res.send(result);
+      });
+
+      app.put('/users/seller/:id', verifyJWT, verifyAdmin, async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updatedDoc = {
+          $set: {
+            status: 'verified'
+          }
+        }
+        const result = await usersCollection.updateOne(filter, updatedDoc, options);
+        res.send(result);
+      });
     }
     finally{}
 }
