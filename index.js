@@ -40,6 +40,9 @@ async function run(){
       const usersCollection = client.db('mobileResaleMarket').collection('users');
       const paymentsCollection = client.db('mobileResaleMarket').collection('payments');
       const reportedItemsCollection = client.db('mobileResaleMarket').collection('reportedItems');
+      const totalMonyCollection = client.db('mobileResaleMarket').collection('totalMoney');
+      const studentMonyCollection = client.db('mobileResaleMarket').collection('studentMoney');
+      const studentMonyCollection2 = client.db('mobileResaleMarket').collection('studentMoney2');
 
       const verifyAdmin = async (req, res, next) => {
         const decodedEmail = req.decoded.email;
@@ -50,6 +53,41 @@ async function run(){
         }
         next();
       }
+
+      // Student Mony
+      app.post('/studentMoney2', async (req, res) => {
+        const monyInfo = req.body
+        const result = await studentMonyCollection2.insertOne(monyInfo)
+        res.send(result)
+      })
+
+      app.get('/studentMoney2/:classRoll', async (req, res) => {
+        const classRoll = req.params.classRoll;
+        const query = { classRoll };
+        const service = await studentMonyCollection2.findOne(query);
+        res.send(service);
+      });
+
+      app.delete("/studentMoney2/:id", async (req, res) => {
+        const id = req.params.id;
+        const filter = { _id: ObjectId(id) };
+        const result = await studentMonyCollection2.deleteOne(filter);
+        res.json(result);
+
+
+      });
+
+      // app.delete("/studentMoney2", async (req, res) => {
+      //   const query = {};
+      //   const result = await studentMonyCollection2.deleteMany(query);
+      //   res.send(result);
+      // });
+
+      app.get("/studentMoney2", async (req, res) => {
+        const query = {};
+        const result = await studentMonyCollection2.find(query).toArray();
+        res.send(result);
+      });
 
       //phone categories
       app.get('/categories', async (req, res) => {
